@@ -10,58 +10,52 @@ const choices = {
 
 const weapons = ["rock", "paper", "scissors"];
 
-function userSelection()
-{
-    let tmp = prompt("Rock, Paper or Scissors?: ").toLowerCase();
-
-     return answerValidation(tmp);
-}
-
-function computerSelection()
+function computerPlay()
 {
     return weapons[Math.floor(Math.random() * 3)];
 }
 
-function answerValidation(userInput)
-{
-    while(!weapons.includes(userInput))
-    {
-        userInput = prompt("Nice try bozo... ROCK PAPER OR SCISSORS?: ").toLowerCase();
-    }
-    
-    return userInput;
-}
+let userScoreText = document.querySelector('.userScore');
+let computerScoreText = document.querySelector('.computerScore');
+let displayText = document.querySelector('.displayText');
 
-function playRound(userPick, computerPick)
+function playRound(userPick)
 {
-    userChoice = userSelection();
-    computerChoice = computerSelection();
+    userChoice = userPick;
+    computerChoice = computerPlay();
 
     if(choices[userChoice].weakTo == computerChoice)
     {
         computerScore++;
-        console.log("User lost, " + computerChoice + " beats " + userChoice);
-
+        computerScoreText.innerText = computerScore.toString();
+        displayText.innerText = `Computer's ${computerChoice} beats your ${userChoice}!`;
+        
     }
     else if(choices[computerChoice].weakTo == userChoice)
     {
         userScore++;
-        console.log("Computer lost, " + userChoice + " beats " + computerChoice);
+        userScoreText.innerText = userScore.toString();
+        displayText.innerText = `Your ${userChoice} beats the computers ${computerChoice}!`;
     }
     else
     {
-        console.log("It's a tie!");
+       displayText.innerText = `It's a tie!`;
     }
 }
+
+const buttons = document.querySelector('.buttons');
+
+buttons.addEventListener('click', function(event) {
+    let target = event.target;
+
+    if (target.tagName != "BUTTON")
+        return;
+
+    playRound(target.dataset.key); //Pass the buttons value (Rock Paper Scissors)
+});
 
 
 function game()
 {
-    for(let i = 0; i < 5; i++)
-    {
-        playRound();
-        console.log("Score: Player - " + userScore + " / Computer - " + computerScore);
-    }
-}
 
-game();
+}
